@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Баланс — счётчик калорий</title>
+<style>
+:root{--bg:#f5f7f2;--card:#fff;--ink:#20312a;--muted:#78867e;--green:#347a58;--mint:#e4f1e8;--line:#e7ece7;--orange:#f1a65b;--shadow:0 12px 35px #233d2b0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:28px 20px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:15px;background:var(--green);color:white;display:grid;place-items:center;font-size:24px}.brand h1{font-size:22px;margin:0;letter-spacing:-.6px}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}.date{font-size:14px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 13px}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}.eyebrow{font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:700}.calorie-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.calorie-head h2{font-size:19px;margin:8px 0 0}.edit-goal{border:1px solid var(--line);background:white;color:var(--green);padding:8px 11px;border-radius:10px;cursor:pointer;font-weight:650}.numbers{display:flex;align-items:baseline;gap:8px;margin:22px 0 15px}.numbers strong{font-size:44px;letter-spacing:-2px}.numbers span{color:var(--muted);font-size:14px}.bar{height:12px;background:#edf1ed;border-radius:99px;overflow:hidden}.bar div{height:100%;width:0;background:linear-gradient(90deg,#347a58,#83b78f);border-radius:99px;transition:width .25s}.summary{display:flex;justify-content:space-between;gap:10px;margin-top:12px;color:var(--muted);font-size:13px}.summary b{color:var(--ink)}.macro-title{margin-bottom:20px}.macros{display:grid;gap:17px}.macro-row{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:11px}.macro-icon{width:38px;height:38px;display:grid;place-items:center;background:var(--mint);border-radius:12px;font-size:17px}.macro-name{font-size:13px;color:var(--muted);margin-bottom:5px}.mini-bar{height:6px;background:#edf1ed;border-radius:99px;overflow:hidden}.mini-bar div{height:100%;border-radius:99px;background:var(--green);width:0}.macro-val{font-size:13px;font-weight:750;white-space:nowrap}.layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.card-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.card-title h2{font-size:18px;margin:0}.hint{font-size:12px;color:var(--muted);margin-top:5px}.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:700;color:#65746b;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid #dfe6df;border-radius:11px;padding:12px 13px;font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#72a687;box-shadow:0 0 0 3px #347a5815}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;background:var(--green);color:#fff;border-radius:12px;padding:13px 16px;font:inherit;font-size:14px;font-weight:750;cursor:pointer;width:100%;transition:transform .15s,opacity .15s}.btn:hover{opacity:.92;transform:translateY(-1px)}.btn:active{transform:translateY(0)}.meal-list{display:grid;gap:10px}.meal{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:13px;border-radius:15px}.food-emoji{width:43px;height:43px;display:grid;place-items:center;background:#f6f3e9;border-radius:13px;font-size:21px;flex-shrink:0}.meal-info{flex:1;min-width:0}.meal-info strong{font-size:14px;display:block;overflow-wrap:anywhere}.meal-info small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.meal-kcal{text-align:right;white-space:nowrap}.meal-kcal strong{display:block;font-size:14px}.meal-kcal small{color:var(--muted);font-size:11px}.delete{border:0;background:transparent;color:#a4aea7;font-size:20px;cursor:pointer;padding:4px 2px 4px 7px}.delete:hover{color:#c45b4c}.empty{text-align:center;padding:32px 12px;color:var(--muted);font-size:14px}.empty span{font-size:30px;display:block;margin-bottom:9px}.footer{text-align:center;color:#98a39b;font-size:12px;margin-top:22px;line-height:1.6}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#20312a;color:white;padding:12px 18px;border-radius:12px;font-size:13px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}
+@media(max-width:760px){.wrap{padding:18px 13px 35px}.hero,.layout{grid-template-columns:1fr}.card{padding:20px}.numbers strong{font-size:39px}.top{align-items:flex-start}.date{font-size:12px;padding:9px}.brand h1{font-size:20px}.brand p{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">◒</div><div><h1>Баланс</h1><p>Твой дневник питания</p></div></div>
+    <div class="date" id="today"></div>
+  </header>
+  <section class="hero">
+    <div class="card">
+      <div class="calorie-head"><div><div class="eyebrow">Твой день</div><h2>Калории</h2></div><button class="edit-goal" id="goalBtn">⚙ Цель</button></div>
+      <div class="numbers"><strong id="remaining">2000</strong><span>ккал осталось</span></div>
+      <div class="bar"><div id="calBar"></div></div>
+      <div class="summary"><span>Съедено: <b id="eaten">0</b> ккал</span><span>Цель: <b id="goalLabel">2000</b> ккал</span></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow macro-title">Баланс БЖУ</div>
+      <div class="macros">
+        <div class="macro-row"><div class="macro-icon">🥩</div><div><div class="macro-name">Белки</div><div class="mini-bar"><div id="proteinBar"></div></div></div><div class="macro-val" id="proteinVal">0 г</div></div>
+        <div class="macro-row"><div class="macro-icon">🥑</div><div><div class="macro-name">Жиры</div><div class="mini-bar"><div id="fatBar"></div></div></div><div class="macro-val" id="fatVal">0 г</div></div>
+        <div class="macro-row"><div class="macro-icon">🍞</div><div><div class="macro-name">Углеводы</div><div class="mini-bar"><div id="carbBar"></div></div></div><div class="macro-val" id="carbVal">0 г</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="layout">
+    <div class="card">
+      <div class="card-title"><div><h2>Добавить продукт</h2><div class="hint">Укажи порцию и пищевую ценность</div></div><span style="font-size:23px">🥗</span></div>
+      <form id="foodForm">
+        <div class="field"><label for="foodName">Название продукта</label><input id="foodName" placeholder="Например, овсяная каша" required maxlength="80"></div>
+        <div class="two">
+          <div class="field"><label for="amount">Вес порции (г)</label><input id="amount" type="number" min="1" max="5000" value="100" required></div>
+          <div class="field"><label for="kcal">Ккал на 100 г</label><input id="kcal" type="number" min="0" max="1000" placeholder="150" required></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="protein">Белки / 100 г</label><input id="protein" type="number" min="0" max="100" step="0.1" value="0"></div>
+          <div class="field"><label for="fat">Жиры / 100 г</label><input id="fat" type="number" min="0" max="100" step="0.1" value="0"></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="carbs">Углеводы / 100 г</label><input id="carbs" type="number" min="0" max="100" step="0.1" value="0"></div>
+          <div class="field"><label for="mealType">Приём пищи</label><select id="mealType"><option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option></select></div>
+        </div>
+        <button class="btn" type="submit">＋ Добавить в дневник</button>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title"><div><h2>Дневник питания</h2><div class="hint" id="mealCount">Пока пусто — добавь первый продукт</div></div><button class="edit-goal" id="clearBtn" title="Очистить дневник">Очистить</button></div>
+      <div class="meal-list" id="mealList"><div class="empty"><span>🍽️</span>Здесь появятся продукты, которые ты добавишь</div></div>
+    </div>
+  </section>
+  <div class="footer">Данные сохраняются в этом браузере на твоём устройстве.<br>Расчёты ориентировочные — проверяй пищевую ценность на упаковке.</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+const today = new Date();
+$('today').textContent = today.toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+let goal = Number(localStorage.getItem('balans_goal')) || 2000;
+let foods = [];
+try { foods = JSON.parse(localStorage.getItem('balans_foods') || '[]'); if(!Array.isArray(foods)) foods=[]; } catch(e) { foods=[]; }
+function save(){localStorage.setItem('balans_goal',goal);localStorage.setItem('balans_foods',JSON.stringify(foods));}
+function fmt(n){return Math.round(n*10)/10}
+function totals(){return foods.reduce((a,f)=>{a.kcal+=f.kcal*f.amount/100;a.protein+=f.protein*f.amount/100;a.fat+=f.fat*f.amount/100;a.carbs+=f.carbs*f.amount/100;return a},{kcal:0,protein:0,fat:0,carbs:0})}
+function update(){
+ const t=totals(), left=goal-t.kcal;
+ $('remaining').textContent=fmt(left).toLocaleString('ru-RU');$('eaten').textContent=fmt(t.kcal).toLocaleString('ru-RU');$('goalLabel').textContent=goal.toLocaleString('ru-RU');
+ $('calBar').style.width=Math.min(100,t.kcal/goal*100)+'%';$('calBar').style.background=t.kcal>goal?'#df795f':'linear-gradient(90deg,#347a58,#83b78f)';
+ [['protein',t.protein],['fat',t.fat],['carb',t.carbs]].forEach(([key,val])=>{const id=key==='carb'?'carbs':key;$ (key==='carb'?'carbVal':key+'Val').textContent=fmt(val)+' г';$(key==='carb'?'carbBar':key+'Bar').style.width=Math.min(100,val/100*100)+'%';});
+ $('mealCount').textContent=foods.length?`${foods.length} ${foods.length===1?'продукт':foods.length<5?'продукта':'продуктов'} · ${fmt(t.kcal)} ккал`:'Пока пусто — добавь первый продукт';
+ if(!foods.length){$('mealList').innerHTML='<div class="empty"><span>🍽️</span>Здесь появятся продукты, которые ты добавишь</div>';return}
+ const icons={'Завтрак':'🌅','Обед':'🍲','Ужин':'🌙','Перекус':'🍎'};
+ $('mealList').innerHTML=foods.slice().reverse().map(f=>`<div class="meal"><div class="food-emoji">${icons[f.mealType]||'🥗'}</div><div class="meal-info"><strong>${escapeHtml(f.name)}</strong><small>${f.mealType} · ${f.amount} г · Б ${fmt(f.protein*f.amount/100)} / Ж ${fmt(f.fat*f.amount/100)} / У ${fmt(f.carbs*f.amount/100)} г</small></div><div class="meal-kcal"><strong>${fmt(f.kcal*f.amount/100)}</strong><small>ккал</small></div><button class="delete" data-id="${f.id}" aria-label="Удалить продукт">×</button></div>`).join('');
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
+$('foodForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=$('foodName').value.trim(),amount=Number($('amount').value),kcal=Number($('kcal').value),protein=Number($('protein').value)||0,fat=Number($('fat').value)||0,carbs=Number($('carbs').value)||0;
+ if(!name||!Number.isFinite(amount)||amount<=0||!Number.isFinite(kcal)||kcal<0){toast('Проверь название, вес и калории');return}
+ foods.push({id:Date.now()+Math.random(),name,amount,kcal,protein,fat,carbs,mealType:$('mealType').value});
+ save();update();$('foodName').value='';$('kcal').value='';$('foodName').focus();toast('Продукт добавлен в дневник');
+});
+$('mealList').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;foods=foods.filter(f=>String(f.id)!==b.dataset.id);save();update();toast('Продукт удалён')});
+$('goalBtn').addEventListener('click',()=>{const v=prompt('Твоя дневная цель в ккал:',goal);if(v===null)return;const n=Number(v);if(Number.isFinite(n)&&n>=500&&n<=10000){goal=Math.round(n);save();update();toast('Цель обновлена')}else toast('Введи число от 500 до 10000')});
+$('clearBtn').addEventListener('click',()=>{if(!foods.length)return;if(confirm('Удалить все продукты из дневника?')){foods=[];save();update();toast('Дневник очищен')}});
+update();
+</script>
+</body>
+</html>
